@@ -1,5 +1,5 @@
 {
-  "name": "KubaNurse",
+  "name": "kubanurse",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -13,10 +13,10 @@
     "styled-components": "^6.1.18"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "start:dev": "BROWSER=none react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco start",
+    "start:dev": "BROWSER=none craco start",
+    "build": "craco build",
+    "test": "craco test",
     "eject": "react-scripts eject"
   },
   "browserslist": {
@@ -30,5 +30,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@craco/craco": "^7.1.0"
   }
 }

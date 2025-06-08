@@ -32,4 +32,9 @@ def record_joint_counts():
         db.session.add(ja)
         saved.append({'joint_name': name, 'is_swollen': swollen, 'is_tender': tender})
     db.session.commit()
+    
+    return jsonify({
+        'message': 'Joint counts recorded successfully',
+        'data': saved
+    }), 201
 

@@ -5,6 +5,29 @@ from ..models import Patient
 
 patient_bp = Blueprint('patient_bp', __name__)
 
+@patient_bp.route('/', methods=['GET'])
+def search_patients():
+    search = request.args.get('search', '')
+    if search:
+        # Search by first name or last name
+        patients = Patient.query.filter(
+            db.or_(
+                Patient.first_name.ilike(f'%{search}%'),
+                Patient.last_name.ilike(f'%{search}%')
+            )
+        ).all()
+    else:
+        # Return all patients if no search term
+        patients = Patient.query.all()
+    
+    return jsonify([{
+        'id': p.id,
+        'first_name': p.first_name,
+        'last_name': p.last_name,
+        'dob': p.dob.isoformat() if p.dob else None,
+        'gender': p.gender
+    } for p in patients])
+
 @patient_bp.route('/', methods=['POST'])
 def create_patient():
     data = request.get_json() or {}
