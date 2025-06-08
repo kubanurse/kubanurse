@@ -44,7 +44,7 @@ export default function AllergiesAddictions() {
 
   return (
     <div>
-      <h2>Phase 2: Allergies & Addictions</n2>
+      <h2>Phase 2: Allergies & Addictions</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         {entries.map((item, idx) => (

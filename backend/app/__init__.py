@@ -16,6 +16,7 @@ def create_app(config_object='app.config.Config'):
     from .views.examination import exam_bp
     from .views.joint_count import joint_bp
     from .views.das28       import das28_bp
+    from .views.report      import report_bp
 
     app.register_blueprint(patient_bp,     url_prefix='/api/patients')
     app.register_blueprint(allergies_bp,   url_prefix='/api/allergies')
@@ -23,4 +24,5 @@ def create_app(config_object='app.config.Config'):
     app.register_blueprint(joint_bp,       url_prefix='/api/joint-count')
     app.register_blueprint(das28_bp,       url_prefix='/api/das28')
 
+    app.register_blueprint(report_bp,      url_prefix='/api/report')
     return app

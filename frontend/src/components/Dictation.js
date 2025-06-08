@@ -33,11 +33,14 @@ export default function Dictation() {
       let interim = '';
       for (let i = event.resultIndex; i < event.results.length; ++i) {
         const result = event.results[i];
-        (result.isFinal ? setTranscript(t => t + result[0].transcript + '
-')
-                         : interim += result[0].transcript);
+        if (result.isFinal) {
+          setTranscript(t => t + result[0].transcript + '\n');
+        } else {
+          interim += result[0].transcript;
+        }
       }
     };
+
 
     recognition.onerror = (e) => {
       setError('Speech recognition error: ' + e.error);

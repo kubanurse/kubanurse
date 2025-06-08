@@ -1,3 +1,4 @@
+// frontend/src/components/Das28Result.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useSearchParams } from 'react-router-dom';
@@ -47,10 +48,19 @@ export default function Das28Result() {
     }
   };
 
+  const downloadReport = () => {
+    // Opens the PDF report in a new tab (or triggers download)
+    window.open(
+      `${process.env.REACT_APP_API_URL}/report/${patientId}`,
+      '_blank'
+    );
+  };
+
   return (
     <div>
       <h2>Phase 5: DAS28 Calculation</h2>
       {error && <p style={{ color: 'red' }}>{error}</p>}
+
       {!score ? (
         <form onSubmit={handleSubmit}>
           <div>
@@ -87,7 +97,7 @@ export default function Das28Result() {
             />
           </div>
           <div>
-            <label>Patient Global Assessment (0-100):</label>
+            <label>Patient Global Assessment (0–100):</label>
             <input
               type="number"
               name="global_assessment"
@@ -107,8 +117,24 @@ export default function Das28Result() {
           <h3>DAS28 Score: {score}</h3>
           <p>Interpretation:</p>
           <ul>
-            <li>{score > 5.1 ? 'High disease activity' : score >= 3.2 ? 'Moderate activity' : score >= 2.6 ? 'Low activity' : 'Remission'}</li>
+            <li>
+              {score > 5.1
+                ? 'High disease activity'
+                : score >= 3.2
+                ? 'Moderate activity'
+                : score >= 2.6
+                ? 'Low activity'
+                : 'Remission'}
+            </li>
           </ul>
+
+          {/* Download Report Button */}
+          <button
+            onClick={downloadReport}
+            style={{ marginTop: '1rem', backgroundColor: '#007bff', color: '#fff', padding: '0.5rem 1rem', border: 'none', borderRadius: '4px' }}
+          >
+            Download Full Report (PDF)
+          </button>
         </div>
       )}
     </div>
