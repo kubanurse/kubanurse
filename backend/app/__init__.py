@@ -10,6 +10,11 @@ def create_app(config_object='app.config.Config'):
     migrate.init_app(app, db)
     cors.init_app(app)
 
+    # Simple test route
+    @app.route('/api/test')
+    def test():
+        return {'message': 'API is working!', 'status': 'ok'}
+
     # register blueprints
     from .views.patient     import patient_bp
     from .views.allergies   import allergies_bp
