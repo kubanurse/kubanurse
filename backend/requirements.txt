@@ -1,6 +1,8 @@
-Flask
-Flask-SQLAlchemy
-Flask-Migrate
-Flask-Cors
-psycopg2-binary
-reportlab
+Flask>=2.3.0
+Flask-SQLAlchemy>=3.0.0
+Flask-Migrate>=4.0.0
+Flask-Cors>=4.0.0
+psycopg2-binary>=2.9.0
+reportlab>=4.0.0
+python-dotenv>=1.0.0
+Werkzeug>=2.3.0
