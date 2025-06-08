@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Card, FormContainer, StyledButton, colors } from '../styles/GlobalStyles';
 import VoiceCommands from './VoiceCommands';
 import useAutoSave from '../hooks/useAutoSave';
+import JointDiagram from './JointDiagram';
 
 // List of joints for DAS28: 28 joints
 const JOINTS = [
@@ -189,11 +190,39 @@ const SmallButton = styled(StyledButton)`
   }
 `;
 
+const ViewToggle = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+`;
+
+const ViewButton = styled.button`
+  padding: 0.75rem 1.5rem;
+  border: 2px solid ${colors.primary};
+  background: ${props => props.active ? colors.primary : 'white'};
+  color: ${props => props.active ? 'white' : colors.primary};
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: ${props => props.active ? colors.primary : '#f8f9fa'};
+  }
+  
+  @media (max-width: 768px) {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+`;
+
 export default function JointCount() {
   const [counts, setCounts] = useState({});
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [viewMode, setViewMode] = useState('diagram'); // 'table' or 'diagram'
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const patientId = Number(searchParams.get('patient_id'));
@@ -239,6 +268,13 @@ export default function JointCount() {
     setCounts(prev => ({
       ...prev,
       [joint]: { ...prev[joint], [field]: !prev[joint][field] }
+    }));
+  };
+
+  const handleJointClick = (jointName, newState) => {
+    setCounts(prev => ({
+      ...prev,
+      [jointName]: newState
     }));
   };
 
@@ -345,6 +381,21 @@ export default function JointCount() {
           </SuccessMessage>
         )}
 
+        <ViewToggle>
+          <ViewButton 
+            active={viewMode === 'diagram'} 
+            onClick={() => setViewMode('diagram')}
+          >
+            🫁 Visual Diagram
+          </ViewButton>
+          <ViewButton 
+            active={viewMode === 'table'} 
+            onClick={() => setViewMode('table')}
+          >
+            📋 Table View
+          </ViewButton>
+        </ViewToggle>
+
         <QuickActions>
           <SmallButton onClick={markAllSwollen} className="secondary">
             Mark All Swollen
@@ -360,7 +411,13 @@ export default function JointCount() {
           </span>
         </QuickActions>
 
-        <JointTable>
+        {viewMode === 'diagram' ? (
+          <JointDiagram 
+            counts={counts} 
+            onJointClick={handleJointClick}
+          />
+        ) : (
+          <JointTable>
           <TableHeader>
             <div>Joint</div>
             <div>Swollen</div>
@@ -387,6 +444,7 @@ export default function JointCount() {
             </JointRow>
           ))}
         </JointTable>
+        )}
 
         <SummaryCard>
           <h3>Assessment Summary</h3>
