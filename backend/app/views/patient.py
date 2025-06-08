@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from datetime import datetime
 from ..extensions import db
 from ..models import Patient
 
@@ -10,11 +11,17 @@ def create_patient():
     # Required fields
     first = data.get('first_name')
     last = data.get('last_name')
-    dob = data.get('dob')  # Expect YYYY-MM-DD
+    dob_str = data.get('dob')  # Expect YYYY-MM-DD
     gender = data.get('gender')
 
-    if not all([first, last, dob, gender]):
+    if not all([first, last, dob_str, gender]):
         return jsonify({'error': 'Missing required patient fields'}), 400
+
+    # Convert date string to date object
+    try:
+        dob = datetime.strptime(dob_str, '%Y-%m-%d').date()
+    except ValueError:
+        return jsonify({'error': 'Invalid date format. Expected YYYY-MM-DD'}), 400
 
     patient = Patient(
         first_name=first,
